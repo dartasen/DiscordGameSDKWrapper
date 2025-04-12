@@ -1,7 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFrameworks>net462;net472;net481;net5.0;net6.0;net7.0;net8.0;netstandard2.0;netstandard2.1;netcoreapp2.2.2;netcoreapp3.1</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0</TargetFrameworks>
         <Nullable>disable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>DiscordGameSDKWrapper</Title>
@@ -21,6 +22,7 @@
         <PublicSign>true</PublicSign>
         <AssemblyOriginatorKeyFile>..\strongkey.snk</AssemblyOriginatorKeyFile>
     </PropertyGroup>
+
     <ItemGroup>
         <None Include="..\README.md" Pack="true" Visible="false" PackagePath=""/>
         <None Include="..\LICENSE.md" Pack="true" Visible="false" PackagePath=""/>
@@ -28,6 +30,7 @@
             <Link>strongkey.snk</Link>
         </None>
     </ItemGroup>
+
     <ItemGroup>
         <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
             <PrivateAssets>all</PrivateAssets>
@@ -35,3 +38,4 @@
         </PackageReference>
     </ItemGroup>
 </Project>
+

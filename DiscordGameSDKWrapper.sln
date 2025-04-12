@@ -1,8 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordGameSDKWrapper", "DiscordGameSDKWrapper\DiscordGameSDKWrapper.csproj", "{2B0A387A-3EEC-41EB-9460-072365EB1B97}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordGameSDKWrapper.UnityEngine", "DiscordGameSDKWrapper.UnityEngine\DiscordGameSDKWrapper.UnityEngine.csproj", "{9EAAC56F-98E9-4258-A9AB-5FF830F0BC1B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE.md = LICENSE.md
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +28,11 @@ Global
 		{9EAAC56F-98E9-4258-A9AB-5FF830F0BC1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EAAC56F-98E9-4258-A9AB-5FF830F0BC1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EAAC56F-98E9-4258-A9AB-5FF830F0BC1B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9DBEE46A-1818-4773-B228-A759ABEA523B}
 	EndGlobalSection
 EndGlobal
