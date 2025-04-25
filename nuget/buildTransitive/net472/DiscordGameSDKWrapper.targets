@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <ShouldIncludeNativeDiscordGameSDK Condition="'$(ShouldIncludeNativeDiscordGameSDK)' == ''">True</ShouldIncludeNativeDiscordGameSDK>
+    </PropertyGroup>
+
+    <ItemGroup Condition=" '$(ShouldIncludeNativeDiscordGameSDK)' != 'False' ">
+
+        <!-- Win 32 -->
+        <_NativeDiscordGameSdkFile Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\native\discord_game_sdk.dll">
+            <Dir>win-x86\</Dir>
+        </_NativeDiscordGameSdkFile>
+
+        <!-- Win 64 -->
+        <_NativeDiscordGameSdkFile Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\native\discord_game_sdk.dll">
+            <Dir>win-x64\</Dir>
+        </_NativeDiscordGameSdkFile>
+
+        <!-- OSX AARCH 64 -->
+        <_NativeDiscordGameSdkFile Include="$(MSBuildThisFileDirectory)..\..\runtimes\osx-arm64\native\discord_game_sdk.dylib">
+            <Dir>osx-arm64\</Dir>
+        </_NativeDiscordGameSdkFile>
+
+        <!-- OSX x64 -->
+        <_NativeDiscordGameSdkFile Include="$(MSBuildThisFileDirectory)..\..\runtimes\osx-x64\native\discord_game_sdk.dylib">
+            <Dir>osx-x64\</Dir>
+        </_NativeDiscordGameSdkFile>
+
+        <!-- Linux x64 -->
+        <_NativeDiscordGameSdkFile Include="$(MSBuildThisFileDirectory)..\..\runtimes\linux-x64\native\discord_game_sdk.so">
+            <Dir>linux-x64\</Dir>
+        </_NativeDiscordGameSdkFile>
+
+        <Content Include="@(_NativeDiscordGameSdkFile)">
+            <Link>runtimes\%(Dir)\native\%(Filename)%(Extension)</Link>
+            <Visible>False</Visible>
+            <Pack>False</Pack>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+</Project>

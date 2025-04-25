@@ -4,12 +4,12 @@ namespace DiscordGameSDKWrapper
 {
     public partial struct ImageHandle
     {
-        static public ImageHandle User(Int64 id)
+        static public ImageHandle User(long id)
         {
             return User(id, 128);
         }
 
-        static public ImageHandle User(Int64 id, UInt32 size)
+        static public ImageHandle User(long id, uint size)
         {
             return new ImageHandle
             {

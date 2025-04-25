@@ -6,7 +6,7 @@ namespace DiscordGameSDKWrapper
 {
     public partial class LobbyManager
     {
-        public IEnumerable<User> GetMemberUsers(Int64 lobbyID)
+        public IEnumerable<User> GetMemberUsers(long lobbyID)
         {
             var memberCount = MemberCount(lobbyID);
             var members = new List<User>();
@@ -17,7 +17,7 @@ namespace DiscordGameSDKWrapper
             return members;
         }
 
-        public void SendLobbyMessage(Int64 lobbyID, string data, SendLobbyMessageHandler handler)
+        public void SendLobbyMessage(long lobbyID, string data, SendLobbyMessageHandler handler)
         {
             SendLobbyMessage(lobbyID, Encoding.UTF8.GetBytes(data), handler);
         }

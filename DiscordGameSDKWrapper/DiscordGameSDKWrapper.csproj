@@ -1,41 +1,60 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <OutputType>Library</OutputType>
-        <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0</TargetFrameworks>
-        <Nullable>disable</Nullable>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Title>DiscordGameSDKWrapper</Title>
-        <PackageId>DiscordGameSDKWrapper</PackageId>
-        <Version>3.2.1.1</Version>
-        <PackageTags>Discord</PackageTags>
-        <Authors>Jannify</Authors>
-        <Description>Nuget package of the provided Discord Game SDK C# Wrapper contained in the zip linked on https://discord.com/developers/docs/game-sdk/sdk-starter-guide</Description>
-        <RepositoryType>git</RepositoryType>
-        <RepositoryUrl>https://github.com/Jannify/DiscordGameSDKWrapper.git</RepositoryUrl>
-        <PackageProjectUrl>https://github.com/Jannify/DiscordGameSDKWrapper</PackageProjectUrl>
-        <PackageReleaseNotes>https://github.com/Jannify/DiscordGameSDKWrapper/releases/tag/v3.2.1</PackageReleaseNotes>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-        <Copyright>Copyright (C) 2022 Discord Inc. See https://discord.com/developers/docs/legal &amp; https://discord.com/developers/docs/policy</Copyright>
-        <SignAssembly>true</SignAssembly>
-        <PublicSign>true</PublicSign>
-        <AssemblyOriginatorKeyFile>..\strongkey.snk</AssemblyOriginatorKeyFile>
-    </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFrameworks>net472;netstandard2.0;netstandard2.1;net8.0;net9.0</TargetFrameworks>
+		<LangVersion>13.0</LangVersion>
+		<Nullable>disable</Nullable>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Title>DiscordGameSDKWrapper</Title>
+		<PackageId>DiscordGameSDKWrapper</PackageId>
+		<Version>3.2.1.6</Version>
+		<PackageTags>Discord, DiscordGameSDK, discord-game-sdk</PackageTags>
+		<Authors>Jannify;dartasen</Authors>
+		<Description>Nuget package of the provided Discord Game SDK C# Wrapper contained in the zip linked on https://discord.com/developers/docs/game-sdk/sdk-starter-guide</Description>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/Jannify/DiscordGameSDKWrapper.git</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/Jannify/DiscordGameSDKWrapper</PackageProjectUrl>
+		<PackageReleaseNotes>https://github.com/Jannify/DiscordGameSDKWrapper/releases/</PackageReleaseNotes>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+		<Copyright>Copyright (C) 2025 Discord Inc. See https://discord.com/developers/docs/legal &amp; https://discord.com/developers/docs/policy</Copyright>
+		<!-- https://github.com/dotnet/sdk/issues/10625 -->
+		<RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-arm64;osx-x64</RuntimeIdentifiers>
+	</PropertyGroup>
 
-    <ItemGroup>
-        <None Include="..\README.md" Pack="true" Visible="false" PackagePath=""/>
-        <None Include="..\LICENSE.md" Pack="true" Visible="false" PackagePath=""/>
-        <None Include="..\strongkey.snk">
-            <Link>strongkey.snk</Link>
-        </None>
-    </ItemGroup>
+	<!-- Nuget package files -->
+	<ItemGroup>
+		<None Include="$(MSBuildThisFileDirectory)..\README.md" Pack="true" Visible="false" PackagePath="." />
+		<None Include="$(MSBuildThisFileDirectory)..\LICENSE.md" Pack="true" Visible="false" PackagePath="." />
+		<None Include="$(MSBuildThisFileDirectory)..\nuget\runtimes\linux-x64\native\*" Pack="True" Visible="False" PackagePath=".\runtimes\linux-x64\native" />
+		<None Include="$(MSBuildThisFileDirectory)..\nuget\runtimes\osx-arm64\native\*" Pack="True" Visible="False" PackagePath=".\runtimes\osx-arm64\native" />
+		<None Include="$(MSBuildThisFileDirectory)..\nuget\runtimes\osx-x64\native\*" Pack="True" Visible="False" PackagePath=".\runtimes\osx-x64\native" />
+		<None Include="$(MSBuildThisFileDirectory)..\nuget\runtimes\win-x64\native\*" Pack="True" Visible="False" PackagePath=".\runtimes\win-x64\native" />
+		<None Include="$(MSBuildThisFileDirectory)..\nuget\runtimes\win-x86\native\*" Pack="True" Visible="False" PackagePath=".\runtimes\win-x86\native" />
+		<None Include="$(MSBuildThisFileDirectory)..\nuget\buildTransitive\**\*" Pack="True" Visible="False" PackagePath=".\buildTransitive" />
+	</ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-        </PackageReference>
-    </ItemGroup>
+	<!-- Build properties -->
+	<PropertyGroup>
+		<_BuildArch>$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLowerInvariant)</_BuildArch>
+		<_BuildOS></_BuildOS>
+		<_BuildOS Condition="$([System.OperatingSystem]::IsWindows())">win</_BuildOS>
+		<_BuildOS Condition="$([System.OperatingSystem]::IsLinux())">linux</_BuildOS>
+		<_BuildOS Condition="$([System.OperatingSystem]::IsMacOS())">osx</_BuildOS>
+	</PropertyGroup>
+
+	<!-- Copy current os architecture native file if it's available to OutputDirectory -->
+	<ItemGroup Condition="!$(TargetFramework.Contains('-')) or $(TargetFramework.Contains('-desktop'))">
+		<None Update="$(MSBuildThisFileDirectory)..\nuget\runtimes\$(_BuildOS)-$(_BuildArch)\native\*"
+			  Condition="'$(_BuildOS)' != '' AND '$(_BuildArch)' != '' AND '$(RuntimeIdentifier)' == ''"
+			  CopyToOutputDirectory="PreserveNewest" />
+
+		<None Update="$(MSBuildThisFileDirectory)..\nuget\runtimes\$(RuntimeIdentifier)\native\*"
+			  Condition="'$(RuntimeIdentifier)' != ''"
+			  CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+
 </Project>
 
