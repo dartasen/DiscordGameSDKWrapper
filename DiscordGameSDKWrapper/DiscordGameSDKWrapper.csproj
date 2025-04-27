@@ -9,7 +9,7 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Title>DiscordGameSDKWrapper</Title>
 		<PackageId>DiscordGameSDKWrapper</PackageId>
-		<Version>3.2.1.6</Version>
+		<Version>3.2.1.8</Version>
 		<PackageTags>Discord, DiscordGameSDK, discord-game-sdk</PackageTags>
 		<Authors>Jannify;dartasen</Authors>
 		<Description>Nuget package of the provided Discord Game SDK C# Wrapper contained in the zip linked on https://discord.com/developers/docs/game-sdk/sdk-starter-guide</Description>

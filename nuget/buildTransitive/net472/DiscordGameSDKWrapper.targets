@@ -5,7 +5,7 @@
         <ShouldIncludeNativeDiscordGameSDK Condition="'$(ShouldIncludeNativeDiscordGameSDK)' == ''">True</ShouldIncludeNativeDiscordGameSDK>
     </PropertyGroup>
 
-    <ItemGroup Condition=" '$(ShouldIncludeNativeDiscordGameSDK)' != 'False' ">
+    <ItemGroup Condition="'$(ShouldIncludeNativeDiscordGameSDK)' != 'False' AND '$(RuntimeIdentifier)' == ''">
 
         <!-- Win 32 -->
         <_NativeDiscordGameSdkFile Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\native\discord_game_sdk.dll">
@@ -38,6 +38,13 @@
             <Pack>False</Pack>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(ShouldIncludeNativeDiscordGameSDK)' != 'False' AND '$(RuntimeIdentifier)' != ''">
+        <Content Include="$(MSBuildThisFileDirectory)..\..\runtimes\$(RuntimeIdentifier)\native\*"
+                 Visible="False"
+                 Pack="False"
+                 CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
 </Project>
