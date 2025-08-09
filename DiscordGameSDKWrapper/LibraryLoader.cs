@@ -11,8 +11,24 @@ internal static class LibraryLoader
 
     public static string OS { get; }
 
+    public static string log;
+
     static LibraryLoader()
     {
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WINEPREFIX"))) // Is wine environment
+        {
+            if (Directory.Exists("/home"))
+            {
+                Extension = ".so";
+                OS = "linux";
+            }
+            else if (Directory.Exists("/Applications"))
+            {
+                Extension = ".dylib";
+                OS = "osx";
+            }
+        }
+
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             Extension = ".dll";
@@ -36,7 +52,7 @@ internal static class LibraryLoader
 
         if (handle == IntPtr.Zero)
         {
-            throw new DllNotFoundException($"Unable to load library '{libraryName}'.");
+            throw new DllNotFoundException($"{log}\nUnable to load library '{libraryName}' at {libraryPath}.");
         }
 
         return handle;
@@ -52,32 +68,46 @@ internal static class LibraryLoader
             }
 
             // 1. try alongside managed assembly
-            var path = typeof(T).Assembly.Location;
+            string path = typeof(T).Assembly.Location;
             if (!string.IsNullOrEmpty(path))
             {
+                log+="\n1\n";
                 path = Path.GetDirectoryName(path);
-                if (CheckLibraryPath(path, OS, arch, libWithExt, out var localLib))
+                if (CheckLibraryPath(path, OS, arch, libWithExt, out string localLib))
                     return localLib;
             }
 
-            // 2. try current directory
+            // 2. try base directory of assembly resolver
+            path = AppContext.BaseDirectory;
+            if (!string.IsNullOrEmpty(path))
+            {
+                log+="\n2\n";
+                path = Path.GetDirectoryName(path);
+                if (CheckLibraryPath(path, OS, arch, libWithExt, out string localLib))
+                    return localLib;
+            }
+
+            // 3. try current directory
+            log+="\n3\n";
             if (CheckLibraryPath(Directory.GetCurrentDirectory(), OS, arch, libWithExt, out string lib))
             {
                 return lib;
             }
 
-            // 3. try app domain
+            // 4. try app domain
             try
             {
                 if (AppDomain.CurrentDomain is AppDomain domain)
                 {
-                    // 3.1 RelativeSearchPath
+                    // 4.1 RelativeSearchPath
+                    log += "\n4.1 " + domain.RelativeSearchPath + "\n";
                     if (CheckLibraryPath(domain.RelativeSearchPath, OS, arch, libWithExt, out lib))
                     {
                         return lib;
                     }
 
-                    // 3.2 BaseDirectory
+                    // 4.2 BaseDirectory
+                    log+="\n4.2 " + domain.BaseDirectory + "\n";
                     if (CheckLibraryPath(domain.BaseDirectory, OS, arch, libWithExt, out lib))
                     {
                         return lib;
@@ -105,13 +135,27 @@ internal static class LibraryLoader
                     return true;
                 }
 
-                // a. runtimes folder
+                // b. runtimes folder
                 string muslLib = Path.Combine(root, "runtimes", $"{os}-{arch}", libWithExt);
                 if (File.Exists(muslLib))
                 {
                     foundPath = muslLib;
                     return true;
                 }
+
+                // c. runtimes/native folder
+                string muslNatLib = Path.Combine(root, "runtimes", $"{os}-{arch}", "native", libWithExt);
+                if (File.Exists(muslNatLib))
+                {
+                    foundPath = muslNatLib;
+                    return true;
+                }
+
+                log += "not found anything at " + muslNatLib + "\n";
+            }
+            else
+            {
+                log += "root null" + "\n";
             }
 
             // d. nothing

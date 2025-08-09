@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
@@ -9,7 +9,7 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Title>DiscordGameSDKWrapper</Title>
 		<PackageId>DiscordGameSDKWrapper</PackageId>
-		<Version>3.2.1.8</Version>
+		<Version>3.2.1.2</Version>
 		<PackageTags>Discord, DiscordGameSDK, discord-game-sdk</PackageTags>
 		<Authors>Jannify;dartasen</Authors>
 		<Description>Nuget package of the provided Discord Game SDK C# Wrapper contained in the zip linked on https://discord.com/developers/docs/game-sdk/sdk-starter-guide</Description>
@@ -39,7 +39,7 @@
 	<!-- Build properties -->
 	<PropertyGroup>
 		<_BuildArch>$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLowerInvariant)</_BuildArch>
-		<_BuildOS></_BuildOS>
+		<_BuildOS>undefined</_BuildOS>
 		<_BuildOS Condition="$([System.OperatingSystem]::IsWindows())">win</_BuildOS>
 		<_BuildOS Condition="$([System.OperatingSystem]::IsLinux())">linux</_BuildOS>
 		<_BuildOS Condition="$([System.OperatingSystem]::IsMacOS())">osx</_BuildOS>
@@ -57,4 +57,3 @@
 	</ItemGroup>
 
 </Project>
-
